@@ -1,0 +1,415 @@
+{
+  "frames": [
+    {
+      "filename": "stoneWallGateBars_E.png",
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "stoneWallGateBars_N.png",
+      "frame": {
+        "x": 0,
+        "y": 512,
+        "w": 256,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "stoneWallGateBars_S.png",
+      "frame": {
+        "x": 0,
+        "y": 1024,
+        "w": 256,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "stoneWallGateBars_W.png",
+      "frame": {
+        "x": 0,
+        "y": 1536,
+        "w": 256,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "stoneWallGateOpen_E.png",
+      "frame": {
+        "x": 0,
+        "y": 2048,
+        "w": 256,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "stoneWallGateOpen_N.png",
+      "frame": {
+        "x": 0,
+        "y": 2560,
+        "w": 256,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "stoneWallGateOpen_S.png",
+      "frame": {
+        "x": 0,
+        "y": 3072,
+        "w": 256,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "stoneWallGateOpen_W.png",
+      "frame": {
+        "x": 0,
+        "y": 3584,
+        "w": 256,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "stoneWallRound_E.png",
+      "frame": {
+        "x": 0,
+        "y": 4096,
+        "w": 256,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "stoneWallRound_N.png",
+      "frame": {
+        "x": 0,
+        "y": 4608,
+        "w": 256,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "stoneWallRound_S.png",
+      "frame": {
+        "x": 0,
+        "y": 5120,
+        "w": 256,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "stoneWallRound_W.png",
+      "frame": {
+        "x": 0,
+        "y": 5632,
+        "w": 256,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "stoneWall_E.png",
+      "frame": {
+        "x": 0,
+        "y": 6144,
+        "w": 256,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "stoneWall_N.png",
+      "frame": {
+        "x": 0,
+        "y": 6656,
+        "w": 256,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "stoneWall_S.png",
+      "frame": {
+        "x": 0,
+        "y": 7168,
+        "w": 256,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "filename": "stoneWall_W.png",
+      "frame": {
+        "x": 0,
+        "y": 7680,
+        "w": 256,
+        "h": 512
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 256,
+        "h": 512
+      },
+      "sourceSize": {
+        "w": 256,
+        "h": 512
+      },
+      "pivot": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  ],
+  "meta": {
+    "app": "http://free-tex-packer.com",
+    "version": "0.6.7",
+    "image": "walls.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 256,
+      "h": 8192
+    },
+    "scale": 1
+  }
+}
