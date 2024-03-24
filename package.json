@@ -1,10 +1,10 @@
 {
-	"name": "cryptoverse",
+	"name": "zKshatriya",
 	"author": {
-		"name": "steel-feel"
+		"name": "steel-feel <himankjain@yahoo.in>"
 	},
 	"private": true,
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
 		"start": "vite",
