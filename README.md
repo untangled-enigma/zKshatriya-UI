@@ -1,2 +1,4 @@
-# Proof of Treasure (PoT)
-A treasure hunt game powered by zero knowledge proofs
+# zKshatriya
+A open world game powered by zero knowledge proofs.
+
+> More info coming soon
