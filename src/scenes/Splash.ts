@@ -134,7 +134,7 @@ export default class Splash extends Phaser.Scene {
 
         const zkappWorkerClient = new WebWorkerClient();
 
-        const title = this.add.text(loadingX - 150, loadingY - 190, 'zk Collector', { font: '64px Arial' });
+        const title = this.add.text(loadingX - 150, loadingY - 190, 'zKshatriya', { font: '64px Arial' });
         title.setTint(0xff00ff, 0xffff00, 0x0000ff, 0xff0000);
 
         this.add.text(loadingX - 370, this.cameras.main.centerY + 60,
