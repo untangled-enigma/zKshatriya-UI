@@ -16,25 +16,26 @@ export default class Splash extends Phaser.Scene {
 
     openModal() {
         const scene = this;
-      var config = {
-         //@ts-ignore
-        background: scene.rexUI.add.roundRectangle(0, 0, 100, 100, 20, 0x1565c0),
-        //@ts-ignore
-        title: scene.rexUI.add.label({
-             //@ts-ignore
-            background: scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, 0x003c8f),
-            text: scene.add.text(0, 0, 'Instructions', {
-                fontSize: '1.1rem'
+        var config = {
+            //@ts-ignore
+            background: scene.rexUI.add.roundRectangle(0, 0, 100, 100, 20, 0x1565c0),
+            //@ts-ignore
+            title: scene.rexUI.add.label({
+                //@ts-ignore
+                background: scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, 0x003c8f),
+                text: scene.add.text(0, 0, 'Instructions', {
+                    fontSize: '1.5rem',
+                    align : "center"
+                }),
+                space: {
+                    left: 15,
+                    right: 15,
+                    top: 10,
+                    bottom: 10
+                }
             }),
-            space: {
-                left: 15,
-                right: 15,
-                top: 10,
-                bottom: 10
-            }
-        }),
 
-        content: scene.add.text(0, 0,  `Welcome to the world of zk Collector 🔥, where adventure awaits you at every turn! 
+            content: scene.add.text(0, 0, `Welcome to the world of zKshatriya 🔥, where adventure awaits you at every turn! 
         You are Minar, a young hero who must save the land from the evil Ganon and his minions. 😈 
         
         Along the way, you will explore dungeons 🏰, solve puzzles 🧩, collect items 🎁, and fight enemies ⚔️. 
@@ -44,7 +45,7 @@ export default class Splash extends Phaser.Scene {
 
         How to play (Version 0.1):
         1. Collect treasures by walking over them 💎
-        2. Commit treasure to blockchain using SAVE button 💾
+        2. Commit treasure to using SAVE button 💾
 
      Note: 📝
      - This game requires Mina Enabled wallet like Auro Wallet 💳
@@ -52,51 +53,49 @@ export default class Splash extends Phaser.Scene {
      - Each Box is unique. So, can only be collected once. 🚫
 
         `, {
-            fontSize: '1rem'
-        }),
+                fontSize: '1rem'
+            }),
 
-        actions: [
-            // createLabel(scene, 'Close'),
-            // CreateLabel(scene, 'No')
-        ],
+            actions: [
+            ],
 
-        space: {
-            title: 25,
-            content: 25,
-            action: 15,
+            space: {
+                title: 25,
+                content: 25,
+                action: 15,
 
-            left: 20,
-            right: 20,
-            top: 20,
-            bottom: 20,
-        },
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 20,
+            },
 
-        align: {
-            actions: 'right', // 'center'|'left'|'right'
-        },
+            align: {
+                actions: 'right', // 'center'|'left'|'right'
+            },
 
-        expand: {
-            content: false,  // Content is a pure text object
+            expand: {
+                content: false,  // Content is a pure text object
+            }
         }
-    }
 
-    //@ts-ignore
-    var dialog = scene.rexUI.add.dialog(config).setPosition( this.cameras.main.centerX,  this.cameras.main.centerY)
-    .layout()
-    .modalPromise({
-        defaultBehavior: false,
-        // manaulClose: false,
-        anyTouchClose:true,
-        duration: {
-            in: 500,
-            out: 500
-        }
-    })
-    .then(function (data:any) {
-        // print.text += `${JSON.stringify(data)}\n`;
-    })
+        //@ts-ignore
+        var dialog = scene.rexUI.add.dialog(config).setPosition(this.cameras.main.centerX, this.cameras.main.centerY)
+            .layout()
+            .modalPromise({
+                defaultBehavior: false,
+                // manaulClose: false,
+                anyTouchClose: true,
+                duration: {
+                    in: 500,
+                    out: 500
+                }
+            })
+            .then(function (data: any) {
+                // print.text += `${JSON.stringify(data)}\n`;
+            })
 
-   
+
     }
 
     async onDebug() {
@@ -137,32 +136,11 @@ export default class Splash extends Phaser.Scene {
         const title = this.add.text(loadingX - 150, loadingY - 190, 'zKshatriya', { font: '64px Arial' });
         title.setTint(0xff00ff, 0xffff00, 0x0000ff, 0xff0000);
 
-        this.add.text(loadingX - 370, this.cameras.main.centerY + 60,
-            `Welcome to the world of zk Collector 🔥, where adventure awaits you at every turn! 
-            You are Minar, a young hero who must save the land from the evil Ganon and his minions. 😈 
-            
-            Along the way, you will explore dungeons 🏰, solve puzzles 🧩, collect items 🎁, and fight enemies ⚔️. 
-            You will also meet many friends and allies who will help you on your quest. 👫
-            Are you ready to embark on this epic journey with divine Zero Knowlegde powered by Mina Protocol ? 🚀
-            Then grab your sword 🗡️ and shield 🛡️, and let's go! 🙌
-
-            How to play (Version 0.1):
-            1. Collect treasures by walking over them 💎
-            2. Commit treasure to blockchain using SAVE button 💾
-
-         Note: 📝
-         - This game requires Mina Enabled wallet like Auro Wallet 💳
-         - Game is live on Berkley network. Make sure you have enough balance for transactions 💰
-         - Each Box is unique. So, can only be collected once. 🚫
-
-            `
-            , { font: '20px Arial', wordWrap: { width: 700, useAdvancedWrap: true } });
         await this.timeout(5)
 
-        await zkappWorkerClient.compileProgram();
-
-        // await zkappWorkerClient.loadContract();
-        // await zkappWorkerClient.compileContract();
+        if (import.meta.env.PROD) {
+            await zkappWorkerClient.compileProgram();
+        }
 
         const gameScene = this.scene.get('game-ui')
         //@ts-ignore
@@ -189,32 +167,42 @@ export default class Splash extends Phaser.Scene {
 
     async handleConnection() {
         const gameScene = this.scene.get('game-ui')
+
         try {
-            //@ts-ignore
-            await gameScene.zkappWorkerClient.setActiveInstance()
+
+            let token = localStorage.getItem('token')
             //@ts-ignore
             const accounts = await window.mina.requestAccounts();
 
-            const sServiceUrl = import.meta.env.VITE_BACKEND_URL
+            if (!token) {
+                //@ts-ignore
+                await gameScene.zkappWorkerClient.setActiveInstance()
 
-            const { nonce } = await (await fetch(`${sServiceUrl}/api/auth/nonce/${accounts[0]}`)).json()
+                const sServiceUrl = import.meta.env.VITE_BACKEND_URL
 
-            //@ts-ignore
-            gameScene.displayAccount = `${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}`;
+                const { nonce } = await (await fetch(`${sServiceUrl}/api/auth/nonce/${accounts[0]}`)).json()
 
-            const signatureData = await this.signMessage(nonce)
+                //@ts-ignore
+                gameScene.displayAccount = `${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}`;
 
-            const { token } = await (await fetch(`${sServiceUrl}/api/auth/login`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    address: signatureData.publicKey,
-                    signature: signatureData.signature,
-                    name: "demo"
-                }),
-            })).json()
+                const signatureData = await this.signMessage(nonce)
+
+                const result = await (await fetch(`${sServiceUrl}/api/auth/login`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        address: signatureData.publicKey,
+                        signature: signatureData.signature,
+                        name: "demo"
+                    }),
+                })).json()
+
+                localStorage.setItem("token", result.token)
+
+                token = result.token
+            }
 
             //@ts-ignore
             await gameScene.zkappWorkerClient.setGamer(accounts[0], token)
