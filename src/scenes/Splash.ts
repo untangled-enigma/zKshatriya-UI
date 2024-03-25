@@ -184,10 +184,11 @@ export default class Splash extends Phaser.Scene {
         try {
 
             let token = localStorage.getItem('token')
+            const localAccount = localStorage.getItem('account')
             //@ts-ignore
             const accounts = await window.mina.requestAccounts();
 
-            if (!token) {
+            if (!token || localAccount !== accounts[0]) {
                 //@ts-ignore
                 await gameScene.zkappWorkerClient.setActiveInstance()
 
@@ -213,6 +214,7 @@ export default class Splash extends Phaser.Scene {
                 })).json()
 
                 localStorage.setItem("token", result.token)
+                localStorage.setItem("account", accounts[0])
 
                 token = result.token
             }
