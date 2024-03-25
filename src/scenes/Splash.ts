@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import WebWorkerClient from '../zk/WebWorkerClient'
+import as  from 'phaser3-rex-plugins/templates/ui/ui-plugin'
 
 export default class Splash extends Phaser.Scene {
     constructor() {
@@ -14,7 +15,7 @@ export default class Splash extends Phaser.Scene {
         });
     }
 
-    openModal() {
+    openInstructions() {
         const scene = this;
         var config = {
             //@ts-ignore
@@ -71,7 +72,7 @@ export default class Splash extends Phaser.Scene {
             },
 
             align: {
-                actions: 'right', // 'center'|'left'|'right'
+                actions: 'center', // 'center'|'left'|'right'
             },
 
             expand: {
@@ -99,10 +100,11 @@ export default class Splash extends Phaser.Scene {
     }
 
     async onDebug() {
-        this.openModal()
+      
     }
     async init() {
         //debug button
+        if (import.meta.env.DEV) {
         const debugButton = this.add.text(20, 200, 'Debug')
             .setPadding(10)
             .setStyle({ backgroundColor: '#111' })
@@ -110,6 +112,7 @@ export default class Splash extends Phaser.Scene {
             .on('pointerdown', this.onDebug, this)
             .on('pointerover', () => debugButton.setStyle({ fill: '#f39c12' }))
             .on('pointerout', () => debugButton.setStyle({ fill: '#FFF' }))
+    }
 
     }
 
@@ -136,8 +139,19 @@ export default class Splash extends Phaser.Scene {
         const title = this.add.text(loadingX - 150, loadingY - 190, 'zKshatriya', { font: '64px Arial' });
         title.setTint(0xff00ff, 0xffff00, 0x0000ff, 0xff0000);
 
+        const insButton = this.add.text(loadingX, loadingY + 150, 'Game Instructions')
+            .setOrigin(0.5)
+            .setPadding(10)
+            .setFontSize(32)
+            .setStyle({ backgroundColor: '#914' })
+            .setInteractive({ useHandCursor: true })
+            .on('pointerdown', this.openInstructions, this)
+            .on('pointerover', () => insButton.setStyle({ fill: 'yellow' }))
+            .on('pointerout', () => insButton.setStyle({ fill: '#FFF' }))    
+
         await this.timeout(5)
 
+        /// Compile contract only in Prod enviorment
         if (import.meta.env.PROD) {
             await zkappWorkerClient.compileProgram();
         }
@@ -151,7 +165,7 @@ export default class Splash extends Phaser.Scene {
         fill1.destroy();
         bar1.destroy();
 
-        const startButton = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, 'Start game')
+        const startButton = this.add.text(loadingX, loadingY, 'Start game')
             .setOrigin(0.5)
             .setPadding(10)
             .setFontSize(32)
@@ -161,7 +175,6 @@ export default class Splash extends Phaser.Scene {
             .on('pointerover', () => startButton.setStyle({ fill: '#f39c12' }))
             .on('pointerout', () => startButton.setStyle({ fill: '#FFF' }))
 
-        //TODO: Add game instructions    
 
     }
 

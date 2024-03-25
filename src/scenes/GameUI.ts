@@ -60,20 +60,24 @@ export default class GameUI extends Phaser.Scene {
     //ToDo. clean and modularise
     const gameScene = this.scene.get("game")
     //@ts-ignore
-    const playerChests = gameScene?.playerZk.myChests;
-
-    console.log(`chests ${JSON.stringify(playerChests)}`);
+    const items = gameScene?.playerZk.myChests;
 
 
-    for (let i = 0; i < playerChests.length; i++) {
-      await this.zkappWorkerClient.foundItem({ point: { x: playerChests[i].x, y: playerChests[i].y, key: playerChests[i].key } });
+    if (import.meta.env.PROD) {
+    for (let i = 0; i < items.length; i++) {
+      await this.zkappWorkerClient.foundItem({ point: { x: items[i].x, y: items[i].y, key: items[i].key } });
     }
-
-    const finContent = playerChests.map((x:any) => x.key).join(",");
-    console.log(`final items ${finContent}`);
+    }
     
+    await this.zkappWorkerClient.commitTreasure(items)
 
+    // clean Item DB 
+    //@ts-ignore
+    gameScene?.playerZk.clear()
 
+ //@ts-ignore
+    console.log( gameScene?.playerZk.myChests);
+    
 
   }
 

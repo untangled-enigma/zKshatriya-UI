@@ -55,16 +55,14 @@ const functions = {
         state.service = ky.create({ prefixUrl: import.meta.env.VITE_BACKEND_URL, headers: { Authorization: `Bearer ${args.token}` } })
 
         //fetch map
-        const result: { points: { x: number, y: number }[] } = await state.service.get("api/map").json()
+        const result: { points: { x: number, y: number,key:number }[] } = await state.service.get("api/map").json()
 
-        //construct merkle tree, right now fetch the chest from package
+        //construct merkle tree
         const leaves = result.points.map((item) => {
             return Poseidon.hash([Field(item.x), Field(item.y)])
         })
 
-        state.chests = result.points.map((value, index) => {
-            return { ...value, key: index }
-        })
+        state.chests = result.points
 
         state.chestTree = new MerkleTree(20)
         state.chestTree.fill(leaves)
@@ -112,8 +110,17 @@ const functions = {
 
     /// Found treasure transaction
     /// TODO: define type in place of `any`
-    foundTreasure: async (args: { chest: Point }) => {
-        // await state.gameEngine?.addItem(  )
+    commitTreasure: async (args: { items: Point[] }) => {
+        const items = args.items.map((x:any) => x.key + "");
+        
+     const resp = await state.service?.post("api/item/commit", {
+            json : {
+                items 
+            } 
+        }).json()
+
+    console.log({resp});
+        
     },
 
     proveTransaction: async (args: {}) => {

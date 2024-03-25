@@ -39,8 +39,8 @@ export default class WebWorkerClient {
     return result as ReturnType<typeof fetchAccount>;
   }
 
-  foundTreasure(chest: Point) {
-    return this._call('foundTreasure', { chest });
+  commitTreasure(items: Point[]) {
+    return this._call('commitTreasure', { items });
   }
 
   proveTransaction() {

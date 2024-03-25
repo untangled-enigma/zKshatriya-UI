@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { createHeroAnims } from "../anims/heroAnims";
 import { sceneEvents } from "../events/EventCenter";
-import { chectLocs } from "../zk/constants"
+
 import { zkData } from "../zk/zkData";
 
 export default class Game extends Phaser.Scene {
@@ -189,6 +189,9 @@ handleCollision(event: any) {
             ball.destroy();
           }).bind(this, ball),
         });
+
+        console.log({key: ball.getData("mKey")});
+        
 
         //add coins to bucket
         this.playerZk.addChest({x: ball.x , y:ball.y , key: ball.getData("mKey") });

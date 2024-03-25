@@ -1,7 +1,7 @@
-interface zkPoint {
+type zkPoint = {
     x: number;
     y: number;
-    key: number;
+    key: string;
 }
 
 class zkData {
@@ -14,6 +14,9 @@ class zkData {
         this.myChests.push(loc)
     }
 
+    clear() {
+        this.myChests.length = 0 
+    }
 }
 
 export {zkData}
