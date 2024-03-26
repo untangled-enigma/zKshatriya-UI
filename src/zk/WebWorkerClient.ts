@@ -39,8 +39,9 @@ export default class WebWorkerClient {
     return result as ReturnType<typeof fetchAccount>;
   }
 
-  commitTreasure(items: Point[]) {
-    return this._call('commitTreasure', { items });
+ async commitTreasure(items: Point[]): Promise<number>{
+    //@ts-ignore
+    return await this._call('commitTreasure', { items }) ;
   }
 
   proveTransaction() {
@@ -53,6 +54,10 @@ export default class WebWorkerClient {
 
   getChests() {
     return this._call('getChests', {});
+  }
+
+  getScore() {
+    return this._call('getScore', {});
   }
 
   async getTransactionJSON() {

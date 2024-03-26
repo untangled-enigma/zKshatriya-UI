@@ -213,10 +213,15 @@ export default class Splash extends Phaser.Scene {
                     }),
                 })).json()
 
+                if(!result.token){
+                    throw new Error("Login failed")
+                }
+
                 localStorage.setItem("token", result.token)
                 localStorage.setItem("account", accounts[0])
-
                 token = result.token
+               
+               
             }
 
             //@ts-ignore

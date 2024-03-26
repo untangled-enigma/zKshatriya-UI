@@ -84,7 +84,7 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-    this.scene.run("game-ui");
+  
     const map = this.make.tilemap({ key: "map" });
 
     const walls = map.addTilesetImage("walls", "walls");
@@ -133,6 +133,8 @@ export default class Game extends Phaser.Scene {
     this.createChests();
 
     this.matter.world.on("collisionstart", this.handleCollision, this);
+
+    this.scene.run("game-ui");
   }
 
   async createChests() {

@@ -14,7 +14,8 @@ const state = {
     chestTree: null as null | MerkleTree,
     gamer: null as null | PublicKey,
     chests: null as null | Point[],
-    service: null as null | KyInstance
+    service: null as null | KyInstance,
+    score : null as null | number
 };
 
 export type Point = {
@@ -55,7 +56,7 @@ const functions = {
         state.service = ky.create({ prefixUrl: import.meta.env.VITE_BACKEND_URL, headers: { Authorization: `Bearer ${args.token}` } })
 
         //fetch map
-        const result: { points: { x: number, y: number,key:number }[] } = await state.service.get("api/map").json()
+        const result: { points: { x: number, y: number,key:number }[], score:number } = await state.service.get("api/map").json()
 
         //construct merkle tree
         const leaves = result.points.map((item) => {
@@ -66,6 +67,7 @@ const functions = {
 
         state.chestTree = new MerkleTree(20)
         state.chestTree.fill(leaves)
+        state.score = result.score
 
     },
 
@@ -74,6 +76,7 @@ const functions = {
     },
 
     getChests:  () => state.chests,
+    getScore: () => state.score,
     compileProgram: async (args: {}) => {
         state.gameEngine = liteEngine;
         console.time("Compilation Done in ");
@@ -110,16 +113,18 @@ const functions = {
 
     /// Found treasure transaction
     /// TODO: define type in place of `any`
-    commitTreasure: async (args: { items: Point[] }) => {
+    commitTreasure: async (args: { items: Point[] }) : Promise<number> => {
         const items = args.items.map((x:any) => x.key + "");
         
-     const resp = await state.service?.post("api/item/commit", {
+     const resp:any = await state.service?.post("api/item/commit", {
             json : {
                 items 
             } 
         }).json()
 
-    console.log({resp});
+    state.score = resp.score    
+
+    return resp.score
         
     },
 
