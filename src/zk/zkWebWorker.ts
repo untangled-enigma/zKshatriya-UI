@@ -6,7 +6,7 @@ type Transaction = Awaited<ReturnType<typeof Mina.transaction>>;
 
 // ---------------------------------------------------------------------------------------
 
-import { FrontEngine, liteEngine } from 'zkcollector-contract'
+import { liteEngine } from 'zkcollector-contract'
 
 const state = {
     gameEngine: null as null | typeof liteEngine,
