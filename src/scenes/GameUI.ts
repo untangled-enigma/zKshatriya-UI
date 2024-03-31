@@ -22,7 +22,18 @@ export default class GameUI extends Phaser.Scene {
       color: "green",
     });
 
+    //Create proofs button
+    const proofsButton = this.add.text(20, 180, 'Proofs')
+      .setPadding(10)
+      .setStyle({ backgroundColor: '#111' })
+      .setInteractive({ useHandCursor: true })
+      .on('pointerdown', this.onProofs, this)
+      .on('pointerover', () => proofsButton.setStyle({ fill: '#f39c12' }))
+      .on('pointerout', () => proofsButton.setStyle({ fill: '#FFF' }))
+
   }
+
+
 
   async create() {
     sceneEvents.once("coin-collected", this.createSaveButton, this);
@@ -42,10 +53,128 @@ export default class GameUI extends Phaser.Scene {
       color: "black",
     });
 
-    
+
     this.refreshStats()
 
   }
+
+  async onProofs() {
+
+  const dialog = await  this.CreateDialog(this)
+     
+  dialog.setPosition(400, 300)
+      .layout()
+      .modalPromise({
+        defaultBehavior: false,
+        manaulClose: true,
+        duration: {
+          in: 500,
+          out: 500
+        }
+      })
+
+  }
+
+  async fetchProofText() {
+    return `Demo content`
+  }
+
+  async requestProof(){
+
+  }
+
+ async CreateDialog(scene: any) {
+    const content = await this.fetchProofText();
+    var dialog = scene.rexUI.add.dialog({
+      background: scene.rexUI.add.roundRectangle(0, 0, 100, 100, 20, 0x1565c0),
+
+      title: scene.rexUI.add.label({
+        background: scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, 0x003c8f),
+        text: scene.add.text(0, 0, 'Proofs', {
+          fontSize: '24px'
+        }),
+        space: {
+          left: 15,
+          right: 15,
+          top: 10,
+          bottom: 10
+        }
+      }),
+
+      content: scene.add.text(0, 0, content, {
+        fontSize: '24px'
+      }),
+
+      actions: [
+        this.CreateLabel(scene, 'Request Proof'),
+        this.CreateLabel(scene, 'Close')
+
+      ],
+
+      space: {
+        title: 25,
+        content: 25,
+        action: 15,
+
+        left: 20,
+        right: 20,
+        top: 20,
+        bottom: 20,
+      },
+
+      align: {
+        actions: 'right', // 'center'|'left'|'right'
+      },
+
+      expand: {
+        content: false,  // Content is a pure text object
+      }
+    })
+      .on('button.click', async (button, groupName, index, pointer, event) => {
+        console.log(`button index ${index}`)
+
+        if (index == 1) {
+          //Close button clicked
+          dialog.modalClose(null)
+        }
+
+        if(index== 0)
+        {
+         await this.requestProof();
+        }
+
+        // button.getElement('background').setStrokeStyle(1, 0xffffff);
+      })
+      .on('button.over', function (button: any) {
+        button.getElement('background').setStrokeStyle(1, 0xffffff);
+      })
+      .on('button.out', function (button: any) {
+        button.getElement('background').setStrokeStyle();
+      });
+
+    return dialog;
+  }
+
+  CreateLabel(scene:any, text:string) {
+    return scene.rexUI.add.label({
+        // width: 40,
+        // height: 40,
+
+        background: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 20, 0x5e92f3),
+
+        text: scene.add.text(0, 0, text, {
+            fontSize: '24px'
+        }),
+
+        space: {
+            left: 10,
+            right: 10,
+            top: 10,
+            bottom: 10
+        }
+    });
+}
+
 
   createSaveButton() {
     const saveButton = this.add.text(20, 150, 'Save')
