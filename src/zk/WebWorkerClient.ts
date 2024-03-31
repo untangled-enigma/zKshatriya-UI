@@ -60,6 +60,14 @@ export default class WebWorkerClient {
     return this._call('getScore', {});
   }
 
+  getProofs(): Promise<any> {
+    return this._call('getProofs', {});
+  }
+
+  requestProof(): Promise<any> {
+    return this._call('requestProof', {});
+  }
+
   async getTransactionJSON() {
     const result = await this._call('getTransactionJSON', {});
     return result;

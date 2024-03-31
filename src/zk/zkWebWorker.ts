@@ -105,6 +105,13 @@ const functions = {
         return args.point.key
     },
 
+    getProofs : async(args : {}) => {
+       return await state.service?.get("api/get-proofs").json()
+    },
+    requestProof :  async(args : {}) => {
+        return await state.service?.get("api/request-proof").json()
+    },
+
     //To be user with zk app Address
     fetchAccount: async (args: { publicKey58: string }) => {
         const publicKey = PublicKey.fromBase58(args.publicKey58);

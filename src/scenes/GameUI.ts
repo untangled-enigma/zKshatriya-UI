@@ -9,6 +9,7 @@ export default class GameUI extends Phaser.Scene {
   // saveButton!: Phaser.GameObjects.Text;
   displayAccount!: string;
   zkappWorkerClient!: WebWorkerClient;
+  toast!:any;
 
   constructor() {
     super({ key: "game-ui" });
@@ -53,6 +54,26 @@ export default class GameUI extends Phaser.Scene {
       color: "black",
     });
 
+    this.toast =  this.rexUI.add.toast({
+      x: this.cameras.main.centerX,
+      y: this.cameras.main.centerY + 500,
+
+      background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 20, 0x1565c0),
+      text: this.add.text(0, 0, '', {
+          fontSize: '14px'
+      }),
+      duration: {
+        in: 200,
+        hold: 3200,
+        out: 200,
+    },
+      space: {
+          left: 20,
+          right: 20,
+          top: 20,
+          bottom: 20,
+      },
+  })
 
     this.refreshStats()
 
@@ -62,7 +83,7 @@ export default class GameUI extends Phaser.Scene {
 
   const dialog = await  this.CreateDialog(this)
      
-  dialog.setPosition(400, 300)
+  dialog.setPosition(1000, 300)
       .layout()
       .modalPromise({
         defaultBehavior: false,
@@ -76,11 +97,21 @@ export default class GameUI extends Phaser.Scene {
   }
 
   async fetchProofText() {
-    return `Demo content`
+    const { proofs } = await this.zkappWorkerClient.getProofs()
+   
+    let content = `Root                   Url                     Status     Date\n`;
+    for(let i = 0; i < proofs.length ; i++){
+      let root = `${proofs[i].root.substring(0,4)}...${proofs[i].root.substring(proofs[i].root.length-4, proofs[i].root.length)}`;
+        content = content + `${root}      ${proofs[i].fileUrl}   ${proofs[i].status}   ${proofs[i].updatedAt}\n`;
+    } 
+
+    return content
   }
 
   async requestProof(){
+    const { message } = await this.zkappWorkerClient.requestProof()
 
+    this.toast.showMessage(message)
   }
 
  async CreateDialog(scene: any) {
