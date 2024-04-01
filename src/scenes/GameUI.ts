@@ -54,10 +54,11 @@ export default class GameUI extends Phaser.Scene {
       color: "black",
     });
 
+    //@ts-ignore
     this.toast =  this.rexUI.add.toast({
       x: this.cameras.main.centerX,
       y: this.cameras.main.centerY + 500,
-
+ //@ts-ignore
       background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 20, 0x1565c0),
       text: this.add.text(0, 0, '', {
           fontSize: '14px'
@@ -161,6 +162,7 @@ export default class GameUI extends Phaser.Scene {
         content: false,  // Content is a pure text object
       }
     })
+     //@ts-ignore
       .on('button.click', async (button, groupName, index, pointer, event) => {
         console.log(`button index ${index}`)
 
