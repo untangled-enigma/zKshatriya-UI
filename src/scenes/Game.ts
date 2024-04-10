@@ -143,10 +143,10 @@ export default class Game extends Phaser.Scene {
     //@ts-ignore
     const chests = await uiScene.zkappWorkerClient.getChests()
 
-    for (const chestLoc of chests) {
+    for (let i =0; i < chests.length ; i++) {
       const chest = this.matter.add.image(
-        chestLoc.x,
-        chestLoc.y,
+        chests[i].x,
+        chests[i].y,
         "chest",
         undefined,
         {  
@@ -156,7 +156,7 @@ export default class Game extends Phaser.Scene {
       );
       chest.setFixedRotation();
       chest.setStatic(true);
-      chest.setData("mKey", chestLoc.key)
+      chest.setData("mKey", i)
       
     }
   }

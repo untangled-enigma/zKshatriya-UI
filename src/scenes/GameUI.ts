@@ -226,11 +226,11 @@ export default class GameUI extends Phaser.Scene {
     const items = gameScene?.playerZk.myChests;
 
 
-    if (import.meta.env.PROD) {
+    // if (import.meta.env.PROD) {
       for (let i = 0; i < items.length; i++) {
         await this.zkappWorkerClient.foundItem({ point: { x: items[i].x, y: items[i].y, key: items[i].key } });
       }
-    }
+    // }
     await this.zkappWorkerClient.commitTreasure(items)
 
     //@ts-ignore

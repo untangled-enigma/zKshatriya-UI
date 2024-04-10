@@ -152,9 +152,9 @@ export default class Splash extends Phaser.Scene {
         await this.timeout(5)
 
         /// Compile contract only in Prod enviorment
-        if (import.meta.env.PROD) {
+        // if (import.meta.env.PROD) {
             await zkappWorkerClient.compileProgram();
-        }
+        // }
 
         const gameScene = this.scene.get('game-ui')
         //@ts-ignore
