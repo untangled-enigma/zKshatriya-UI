@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { createHeroAnims } from "../anims/heroAnims";
+import { createHeroAnims, createHeroAttack } from "../anims/heroAnims";
 import { sceneEvents } from "../events/EventCenter";
 
 import { zkData } from "../zk/zkData";
@@ -103,6 +103,7 @@ export default class Game extends Phaser.Scene {
     this.matter.world.convertTilemapLayer(wallLayer, {});
 
     createHeroAnims(this.anims);
+    createHeroAttack(this.anims)
 
     this.hero = this.matter.add.sprite(2000, 2000, "hero");
 
@@ -117,7 +118,6 @@ export default class Game extends Phaser.Scene {
     this.cameras.main.startFollow(this.hero, true);
     this.cameras.main.setZoom(0.7, 0.7);
 
-    //Mini MAP
 
     //  The miniCam is 400px wide, so can display the whole world at a zoom of 0.2
     this.minimap = this.cameras
@@ -135,6 +135,30 @@ export default class Game extends Phaser.Scene {
     this.matter.world.on("collisionstart", this.handleCollision, this);
 
     this.scene.run("game-ui");
+
+    //@ts-ignore
+    this.input.keyboard.on('keydown-X', this.onHeroAttack, this );
+    
+  }
+
+  onHeroAttack() {
+    
+    this.hero.setTexture("heroAttack", 5);
+    this.hero.stop()
+   
+    this.hero.anims.play("attack-right", true);
+
+    this.hero.on('animationcomplete', (animation) => {
+      console.log({animation});
+      
+      if (animation.key.search("ttack") > -1 ) {
+          // Switch back to movement spritesheet
+          this.hero.setTexture('hero');
+          // Resume movement animation
+          // .anims.play('move');
+      }
+  });
+
   }
 
   async createChests() {
@@ -154,10 +178,12 @@ export default class Game extends Phaser.Scene {
           label: "chest",
         }
       );
+
       chest.setFixedRotation();
       chest.setStatic(true);
       chest.setData("mKey", i)
-      
+
+   
     }
   }
 

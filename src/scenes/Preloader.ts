@@ -16,6 +16,11 @@ export default class Preloader extends Phaser.Scene {
             frameWidth: 148,
             frameHeight: 144,
         });  
+    
+        this.load.spritesheet('heroAttack', 'hero/hero-attack.png', {
+            frameWidth: 356,
+            frameHeight: 232,
+        });  
 
         this.load.audioSprite('sfx', 'misc/fx_mixdown.json', [
             'misc/fx_mixdown.ogg',

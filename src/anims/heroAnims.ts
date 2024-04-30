@@ -32,3 +32,33 @@ export const createHeroAnims = (anims: Phaser.Animations.AnimationManager) => {
         frames: anims.generateFrameNumbers('hero', { frames: [0] }),
     });
 }
+
+export function createHeroAttack(anims: Phaser.Animations.AnimationManager) {
+    const HERO_FRAMERATE = 10;
+    const HERO_KEY = 'heroAttack'
+    anims.create({
+        key: 'attack-right',
+        frames: anims.generateFrameNumbers(HERO_KEY, { start: 0, end: 9 }),
+        frameRate: HERO_FRAMERATE,
+        repeat: -1
+    });
+    anims.create({
+        key: 'attack-up',
+        frames: anims.generateFrameNumbers(HERO_KEY, { start: 10, end: 19 }),
+        frameRate: HERO_FRAMERATE,
+        repeat: 0
+    });
+    anims.create({
+        key: 'attack-left',
+        frames: anims.generateFrameNumbers(HERO_KEY, { start: 20, end: 29 }),
+        frameRate: HERO_FRAMERATE,
+        repeat: 0
+    });
+    anims.create({
+        key: 'attack-down',
+        frames: anims.generateFrameNumbers(HERO_KEY, { start: 30, end: 39 }),
+        frameRate: HERO_FRAMERATE,
+        repeat: 0
+    });
+
+}
