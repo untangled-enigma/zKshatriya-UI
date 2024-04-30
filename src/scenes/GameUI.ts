@@ -9,7 +9,7 @@ export default class GameUI extends Phaser.Scene {
   // saveButton!: Phaser.GameObjects.Text;
   displayAccount!: string;
   zkappWorkerClient!: WebWorkerClient;
-  toast!:any;
+  toast!: any;
 
   constructor() {
     super({ key: "game-ui" });
@@ -32,6 +32,15 @@ export default class GameUI extends Phaser.Scene {
       .on('pointerover', () => proofsButton.setStyle({ fill: '#f39c12' }))
       .on('pointerout', () => proofsButton.setStyle({ fill: '#FFF' }))
 
+    //Create proofs button
+    const CampaignButton = this.add.text(20, 220, 'Campaign')
+      .setPadding(10)
+      .setStyle({ backgroundColor: '#111' })
+      .setInteractive({ useHandCursor: true })
+      .on('pointerdown', this.onCampaign, this)
+      .on('pointerover', () => CampaignButton.setStyle({ fill: '#f39c12' }))
+      .on('pointerout', () => CampaignButton.setStyle({ fill: '#FFF' }))
+
   }
 
 
@@ -39,6 +48,14 @@ export default class GameUI extends Phaser.Scene {
   async create() {
     sceneEvents.once("coin-collected", this.createSaveButton, this);
     sceneEvents.on("coin-collected", this.handleCoinCollection, this);
+    sceneEvents.on("sword-case-collide", () => {
+      this.toast.showMessage("Please press P to collect sword")
+    }, this);
+
+    sceneEvents.once("sword-acquired", () => {
+      this.toast.showMessage("Please press X to attack")
+    }, this);
+
     // on Chain Score
     this.scoreText = this.add.text(20, 50, `Score: <fetching>`, {
       fontSize: 25,
@@ -55,36 +72,104 @@ export default class GameUI extends Phaser.Scene {
     });
 
     //@ts-ignore
-    this.toast =  this.rexUI.add.toast({
+    this.toast = this.rexUI.add.toast({
       x: this.cameras.main.centerX,
       y: this.cameras.main.centerY + 500,
- //@ts-ignore
+      //@ts-ignore
       background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 20, 0x1565c0),
       text: this.add.text(0, 0, '', {
-          fontSize: '14px'
+        fontSize: '14px'
       }),
       duration: {
         in: 200,
         hold: 3200,
         out: 200,
-    },
-      space: {
-          left: 20,
-          right: 20,
-          top: 20,
-          bottom: 20,
       },
-  })
+      space: {
+        left: 20,
+        right: 20,
+        top: 20,
+        bottom: 20,
+      },
+    })
 
     this.refreshStats()
 
   }
+  onCampaign() {
+    const scene = this;
+    var config = {
+      //@ts-ignore
+      background: scene.rexUI.add.roundRectangle(0, 0, 100, 100, 20, 0x1565c0),
+      //@ts-ignore
+      title: scene.rexUI.add.label({
+        //@ts-ignore
+        background: scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, 0x003c8f),
+        text: scene.add.text(0, 0, 'Campaign', {
+          fontSize: '1.5rem',
+          align: "center"
+        }),
+        space: {
+          left: 15,
+          right: 15,
+          top: 10,
+          bottom: 10
+        }
+      }),
 
+      content: scene.add.text(0, 0, `Mission 1 \n
+      1. Collect sword\n
+      2. Kill Evil Minion\n
+      3. Stand on Magic Carpet`, {
+        fontSize: '1rem'
+      }),
+
+      actions: [
+      ],
+
+      space: {
+        title: 25,
+        content: 25,
+        action: 15,
+
+        left: 20,
+        right: 20,
+        top: 20,
+        bottom: 20,
+      },
+
+      align: {
+        actions: 'center', // 'center'|'left'|'right'
+      },
+
+      expand: {
+        content: false,  // Content is a pure text object
+      }
+    }
+
+    //@ts-ignore
+    var dialog = scene.rexUI.add.dialog(config).setPosition(this.cameras.main.centerX, this.cameras.main.centerY)
+      .layout()
+      .modalPromise({
+        defaultBehavior: false,
+        // manaulClose: false,
+        anyTouchClose: true,
+        duration: {
+          in: 500,
+          out: 500
+        }
+      })
+      .then(function (data: any) {
+        // print.text += `${JSON.stringify(data)}\n`;
+      })
+
+
+  }
   async onProofs() {
 
-  const dialog = await  this.CreateDialog(this)
-     
-  dialog.setPosition(1000, 300)
+    const dialog = await this.CreateDialog(this)
+
+    dialog.setPosition(1000, 300)
       .layout()
       .modalPromise({
         defaultBehavior: false,
@@ -99,23 +184,23 @@ export default class GameUI extends Phaser.Scene {
 
   async fetchProofText() {
     const { proofs } = await this.zkappWorkerClient.getProofs()
-   
+
     let content = `Root                   Url                     Status     Date\n`;
-    for(let i = 0; i < proofs.length ; i++){
-      let root = `${proofs[i].root.substring(0,4)}...${proofs[i].root.substring(proofs[i].root.length-4, proofs[i].root.length)}`;
-        content = content + `${root}      ${proofs[i].fileUrl}   ${proofs[i].status}   ${proofs[i].updatedAt}\n`;
-    } 
+    for (let i = 0; i < proofs.length; i++) {
+      let root = `${proofs[i].root.substring(0, 4)}...${proofs[i].root.substring(proofs[i].root.length - 4, proofs[i].root.length)}`;
+      content = content + `${root}      ${proofs[i].fileUrl}   ${proofs[i].status}   ${proofs[i].updatedAt}\n`;
+    }
 
     return content
   }
 
-  async requestProof(){
+  async requestProof() {
     const { message } = await this.zkappWorkerClient.requestProof()
 
     this.toast.showMessage(message)
   }
 
- async CreateDialog(scene: any) {
+  async CreateDialog(scene: any) {
     const content = await this.fetchProofText();
     var dialog = scene.rexUI.add.dialog({
       background: scene.rexUI.add.roundRectangle(0, 0, 100, 100, 20, 0x1565c0),
@@ -162,7 +247,7 @@ export default class GameUI extends Phaser.Scene {
         content: false,  // Content is a pure text object
       }
     })
-     //@ts-ignore
+      //@ts-ignore
       .on('button.click', async (button, groupName, index, pointer, event) => {
         console.log(`button index ${index}`)
 
@@ -171,9 +256,8 @@ export default class GameUI extends Phaser.Scene {
           dialog.modalClose(null)
         }
 
-        if(index== 0)
-        {
-         await this.requestProof();
+        if (index == 0) {
+          await this.requestProof();
         }
 
         // button.getElement('background').setStrokeStyle(1, 0xffffff);
@@ -188,25 +272,25 @@ export default class GameUI extends Phaser.Scene {
     return dialog;
   }
 
-  CreateLabel(scene:any, text:string) {
+  CreateLabel(scene: any, text: string) {
     return scene.rexUI.add.label({
-        // width: 40,
-        // height: 40,
+      // width: 40,
+      // height: 40,
 
-        background: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 20, 0x5e92f3),
+      background: scene.rexUI.add.roundRectangle(0, 0, 0, 0, 20, 0x5e92f3),
 
-        text: scene.add.text(0, 0, text, {
-            fontSize: '24px'
-        }),
+      text: scene.add.text(0, 0, text, {
+        fontSize: '24px'
+      }),
 
-        space: {
-            left: 10,
-            right: 10,
-            top: 10,
-            bottom: 10
-        }
+      space: {
+        left: 10,
+        right: 10,
+        top: 10,
+        bottom: 10
+      }
     });
-}
+  }
 
 
   createSaveButton() {
@@ -227,9 +311,9 @@ export default class GameUI extends Phaser.Scene {
 
 
     // if (import.meta.env.PROD) {
-      for (let i = 0; i < items.length; i++) {
-        await this.zkappWorkerClient.foundItem({ point: { x: items[i].x, y: items[i].y, key: items[i].key } });
-      }
+    for (let i = 0; i < items.length; i++) {
+      await this.zkappWorkerClient.foundItem({ point: { x: items[i].x, y: items[i].y, key: items[i].key } });
+    }
     // }
     await this.zkappWorkerClient.commitTreasure(items)
 

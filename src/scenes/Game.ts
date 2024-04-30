@@ -20,12 +20,12 @@ export default class Game extends Phaser.Scene {
   private playerPath!: any[];
 
   private floorLayer!: Phaser.Tilemaps.TilemapLayer | null;
-  private playerZk : zkData
+  private playerZk: zkData
 
   private Direction: DirectionType
   private AttackKey!: Phaser.Input.Keyboard.Key
 
-  private IsAttackPlaying : boolean
+  private IsAttackPlaying: boolean
 
   constructor() {
     super("game");
@@ -34,7 +34,7 @@ export default class Game extends Phaser.Scene {
     this.playerZk = new zkData();
     this.Direction = DirectionType.UP
     this.IsAttackPlaying = false
- 
+
   }
 
   preload() {
@@ -53,24 +53,23 @@ export default class Game extends Phaser.Scene {
       this.gameEnded = true;
       return;
     }
-   
-    if (Phaser.Input.Keyboard.JustDown(this.AttackKey))
-    {
-      switch(this.Direction) {
-        case DirectionType.DOWN: 
-        this.hero.anims.play("attack-down", true);
-        break;
-        case DirectionType.UP: 
-        this.hero.anims.play("attack-up", true);
-        break;
-        case DirectionType.RIGHT: 
-        this.hero.anims.play("attack-right", true);
-        break;
-        case DirectionType.LEFT: 
-        this.hero.anims.play("attack-left", true);
-        break;
+
+    if (Phaser.Input.Keyboard.JustDown(this.AttackKey)) {
+      switch (this.Direction) {
+        case DirectionType.DOWN:
+          this.hero.anims.play("attack-down", true);
+          break;
+        case DirectionType.UP:
+          this.hero.anims.play("attack-up", true);
+          break;
+        case DirectionType.RIGHT:
+          this.hero.anims.play("attack-right", true);
+          break;
+        case DirectionType.LEFT:
+          this.hero.anims.play("attack-left", true);
+          break;
       }
-     
+
 
     }
 
@@ -95,7 +94,7 @@ export default class Game extends Phaser.Scene {
       case this.cursors.down?.isDown:
         this.hero.setVelocity(0, SPEED);
         this.hero.anims.play("walk-down", true);
-        this.Direction =DirectionType.DOWN
+        this.Direction = DirectionType.DOWN
         break;
 
       default: {
@@ -118,7 +117,7 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-     //@ts-ignore
+    //@ts-ignore
     this.AttackKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
 
     const map = this.make.tilemap({ key: "map" });
@@ -138,9 +137,9 @@ export default class Game extends Phaser.Scene {
 
     this.matter.world.convertTilemapLayer(wallLayer, {});
 
-    createHeroAttack(this.anims)
+
     createHeroAnims(this.anims);
-    
+
 
     this.hero = this.matter.add.sprite(2000, 2000, "hero");
 
@@ -168,15 +167,82 @@ export default class Game extends Phaser.Scene {
     this.minimap.startFollow(this.hero, true);
 
     this.createChests();
+    this.createSwordCase()
+
 
     this.matter.world.on("collisionstart", this.handleCollision, this);
 
     this.scene.run("game-ui");
 
     //@ts-ignore
-    // this.input.keyboard.on('keyup-X', this.onHeroAttack, this );
-    
+    this.input.keyboard.on('keyup-T', this.debugKey, this);
+
   }
+
+  debugKey() {
+    //x :-3000, y : 3000
+    console.log(`hero position x : ${this.hero.x} , y : ${this.hero.y}`);
+  }
+
+  createSwordCase() {
+    const sword = this.matter.add.image(
+      -3000,
+      3000,
+      "swordCase",
+      undefined,
+      {
+        restitution: 1,
+        label: "sword-case",
+      }
+    );
+
+    sword.setFixedRotation();
+    sword.setStatic(true);
+    sword.setData("mKey", "sword")
+
+    //@ts-ignore
+    sword.setOnCollideWith(this.hero.body, () => {
+      //for toast
+      sceneEvents.emit("sword-case-collide");
+      //
+      this.input.keyboard?.once("keydown-P", pickUpSword, this)
+    })
+
+
+    function pickUpSword() {
+
+      //add the anims
+      createHeroAttack(this.anims)
+      sceneEvents.emit('sword-acquired')
+
+
+      //destory the case
+      sword.destroy();
+
+      this.matter.add.image(
+        -3000,
+        3000,
+        "emptyCase",
+        undefined,
+        {
+          restitution: 1,
+          label: "empty-case",
+        }
+      );
+      sword.setFixedRotation();
+      sword.setStatic(true);
+      sword.setData("mKey", "sword")
+
+    }
+
+    sword.setOnCollideEnd(() => {
+      console.log("collision ended");
+      this.input.keyboard?.off("keydown-P", pickUpSword, this)
+    })
+
+  }
+
+
 
 
   async createChests() {
@@ -185,13 +251,13 @@ export default class Game extends Phaser.Scene {
     //@ts-ignore
     const chests = await uiScene.zkappWorkerClient.getChests()
 
-    for (let i =0; i < chests.length ; i++) {
+    for (let i = 0; i < chests.length; i++) {
       const chest = this.matter.add.image(
         chests[i].x,
         chests[i].y,
         "chest",
         undefined,
-        {  
+        {
           restitution: 1,
           label: "chest",
         }
@@ -201,11 +267,11 @@ export default class Game extends Phaser.Scene {
       chest.setStatic(true);
       chest.setData("mKey", i)
 
-   
+
     }
   }
 
-handleCollision(event: any) {
+  handleCollision(event: any) {
     for (let i = 0; i < event.pairs.length; i++) {
       // The tile bodies in this example are a mixture of compound bodies and simple rectangle
       // bodies. The "label" property was set on the parent body, so we will first make sure
@@ -236,14 +302,14 @@ handleCollision(event: any) {
           }).bind(this, ball),
         });
 
-        console.log({key: ball.getData("mKey")});
-        
+        console.log({ key: ball.getData("mKey") });
+
 
         //add coins to bucket
-        this.playerZk.addChest({x: ball.x , y:ball.y , key: ball.getData("mKey") });
-     
+        this.playerZk.addChest({ x: ball.x, y: ball.y, key: ball.getData("mKey") });
+
         sceneEvents.emit("coin-collected");
-             
+
       }
     }
   }
