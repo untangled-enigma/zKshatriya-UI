@@ -169,7 +169,6 @@ export default class Game extends Phaser.Scene {
     this.createChests();
     this.createSwordCase()
 
-
     this.matter.world.on("collisionstart", this.handleCollision, this);
 
     this.scene.run("game-ui");
@@ -211,14 +210,14 @@ export default class Game extends Phaser.Scene {
 
     function pickUpSword() {
 
-      //add the anims
+      //@ts-ignore
       createHeroAttack(this.anims)
       sceneEvents.emit('sword-acquired')
 
 
       //destory the case
       sword.destroy();
-
+ //@ts-ignore
       this.matter.add.image(
         -3000,
         3000,
