@@ -1,30 +1,30 @@
 import Phaser from "phaser"
 export const createHeroAnims = (anims: Phaser.Animations.AnimationManager) => {
     const HERO_FRAMERATE = 15;
-
+    const repeat = 1
     anims.create({
         key: 'walk-left',
         frames: anims.generateFrameNumbers('hero', { start: 20, end: 29 }),
         frameRate: HERO_FRAMERATE,
-        repeat: -1
+        repeat
     });
     anims.create({
         key: 'walk-up',
         frames: anims.generateFrameNumbers('hero', { start: 10, end: 19 }),
         frameRate: HERO_FRAMERATE,
-        repeat: -1
+        repeat
     });
     anims.create({
         key: 'walk-down',
         frames: anims.generateFrameNumbers('hero', { start: 30, end: 39 }),
         frameRate: HERO_FRAMERATE,
-        repeat: -1
+        repeat
     });
     anims.create({
         key: 'walk-right',
         frames: anims.generateFrameNumbers('hero', { start: 0, end: 9 }),
         frameRate: HERO_FRAMERATE,
-        repeat: -1
+        repeat
     });
 
     anims.create({
@@ -33,14 +33,14 @@ export const createHeroAnims = (anims: Phaser.Animations.AnimationManager) => {
     });
 }
 
-export function createHeroAttack(anims: Phaser.Animations.AnimationManager) {
+export const createHeroAttack = (anims: Phaser.Animations.AnimationManager) => {
     const HERO_FRAMERATE = 10;
     const HERO_KEY = 'heroAttack'
     anims.create({
         key: 'attack-right',
         frames: anims.generateFrameNumbers(HERO_KEY, { start: 0, end: 9 }),
         frameRate: HERO_FRAMERATE,
-        repeat: -1
+        repeat: 0
     });
     anims.create({
         key: 'attack-up',

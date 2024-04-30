@@ -17,7 +17,7 @@ export default class Preloader extends Phaser.Scene {
             frameHeight: 144,
         });  
     
-        this.load.spritesheet('heroAttack', 'hero/hero-attack.png', {
+        this.load.spritesheet('heroAttack', 'hero/hero3.png', {
             frameWidth: 356,
             frameHeight: 232,
         });  

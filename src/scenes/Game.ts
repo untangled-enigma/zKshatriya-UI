@@ -4,6 +4,13 @@ import { sceneEvents } from "../events/EventCenter";
 
 import { zkData } from "../zk/zkData";
 
+enum DirectionType {
+  UP,
+  DOWN,
+  RIGHT,
+  LEFT
+}
+
 export default class Game extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private hero!: Phaser.Physics.Matter.Sprite;
@@ -15,11 +22,19 @@ export default class Game extends Phaser.Scene {
   private floorLayer!: Phaser.Tilemaps.TilemapLayer | null;
   private playerZk : zkData
 
+  private Direction: DirectionType
+  private AttackKey!: Phaser.Input.Keyboard.Key
+
+  private IsAttackPlaying : boolean
+
   constructor() {
     super("game");
     this.playerPath = [];
     this.gameEnded = false;
     this.playerZk = new zkData();
+    this.Direction = DirectionType.UP
+    this.IsAttackPlaying = false
+ 
   }
 
   preload() {
@@ -27,7 +42,7 @@ export default class Game extends Phaser.Scene {
   }
 
   update(): void {
-    if (!this.cursors || !this.hero || this.gameEnded) {
+    if (!this.cursors || !this.hero || this.gameEnded || this.IsAttackPlaying) {
       return;
     }
 
@@ -38,36 +53,55 @@ export default class Game extends Phaser.Scene {
       this.gameEnded = true;
       return;
     }
+   
+    if (Phaser.Input.Keyboard.JustDown(this.AttackKey))
+    {
+      switch(this.Direction) {
+        case DirectionType.DOWN: 
+        this.hero.anims.play("attack-down", true);
+        break;
+        case DirectionType.UP: 
+        this.hero.anims.play("attack-up", true);
+        break;
+        case DirectionType.RIGHT: 
+        this.hero.anims.play("attack-right", true);
+        break;
+        case DirectionType.LEFT: 
+        this.hero.anims.play("attack-left", true);
+        break;
+      }
+     
+
+    }
 
     const SPEED = 8;
-    let Direction;
 
     switch (true) {
       case this.cursors.left?.isDown:
         this.hero.setVelocity(-SPEED, 0);
         this.hero.anims.play("walk-left", true);
-        Direction = 2;
+        this.Direction = DirectionType.LEFT
         break;
       case this.cursors.right?.isDown:
         this.hero.setVelocity(SPEED, 0);
         this.hero.anims.play("walk-right", true);
-        Direction = 3;
+        this.Direction = DirectionType.RIGHT
         break;
       case this.cursors.up?.isDown:
         this.hero.setVelocity(0, -SPEED);
         this.hero.anims.play("walk-up", true);
-        Direction = 1;
+        this.Direction = DirectionType.UP
         break;
       case this.cursors.down?.isDown:
         this.hero.setVelocity(0, SPEED);
         this.hero.anims.play("walk-down", true);
-        Direction = 4;
+        this.Direction =DirectionType.DOWN
         break;
 
       default: {
         //ToDo: stop the character at next tile
         this.hero.setVelocity(0);
-        this.hero.stop();
+        // this.hero.stop();
       }
     }
 
@@ -84,7 +118,9 @@ export default class Game extends Phaser.Scene {
   }
 
   create() {
-  
+     //@ts-ignore
+    this.AttackKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.X);
+
     const map = this.make.tilemap({ key: "map" });
 
     const walls = map.addTilesetImage("walls", "walls");
@@ -102,8 +138,9 @@ export default class Game extends Phaser.Scene {
 
     this.matter.world.convertTilemapLayer(wallLayer, {});
 
-    createHeroAnims(this.anims);
     createHeroAttack(this.anims)
+    createHeroAnims(this.anims);
+    
 
     this.hero = this.matter.add.sprite(2000, 2000, "hero");
 
@@ -137,29 +174,10 @@ export default class Game extends Phaser.Scene {
     this.scene.run("game-ui");
 
     //@ts-ignore
-    this.input.keyboard.on('keydown-X', this.onHeroAttack, this );
+    // this.input.keyboard.on('keyup-X', this.onHeroAttack, this );
     
   }
 
-  onHeroAttack() {
-    
-    this.hero.setTexture("heroAttack", 5);
-    this.hero.stop()
-   
-    this.hero.anims.play("attack-right", true);
-
-    this.hero.on('animationcomplete', (animation) => {
-      console.log({animation});
-      
-      if (animation.key.search("ttack") > -1 ) {
-          // Switch back to movement spritesheet
-          this.hero.setTexture('hero');
-          // Resume movement animation
-          // .anims.play('move');
-      }
-  });
-
-  }
 
   async createChests() {
     const uiScene = this.scene.get('game-ui')
