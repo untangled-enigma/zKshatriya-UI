@@ -209,16 +209,14 @@ export default class Game extends Phaser.Scene {
 
 
     function pickUpSword() {
-
       //@ts-ignore
       createHeroAttack(this.anims)
       sceneEvents.emit('sword-acquired')
 
-
       //destory the case
       sword.destroy();
- //@ts-ignore
-      this.matter.add.image(
+     //@ts-ignore
+     const emptyCase =  this.matter.add.image(
         -3000,
         3000,
         "emptyCase",
@@ -228,9 +226,9 @@ export default class Game extends Phaser.Scene {
           label: "empty-case",
         }
       );
-      sword.setFixedRotation();
-      sword.setStatic(true);
-      sword.setData("mKey", "sword")
+      emptyCase.setFixedRotation();
+      emptyCase.setStatic(true);
+      emptyCase.setData("mKey", "sword")
 
     }
 

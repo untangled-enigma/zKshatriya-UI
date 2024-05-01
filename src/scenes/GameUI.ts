@@ -53,6 +53,7 @@ export default class GameUI extends Phaser.Scene {
     }, this);
 
     sceneEvents.once("sword-acquired", () => {
+      this.sound.playAudioSprite("sfx", "alien death");
       this.toast.showMessage("Please press X to attack")
     }, this);
 
