@@ -3,6 +3,7 @@ import { createHeroAnims, createHeroAttack } from "../anims/heroAnims";
 import { sceneEvents } from "../events/EventCenter";
 
 import { zkData } from "../zk/zkData";
+import { botRun } from "../anims/botAnims";
 
 enum DirectionType {
   UP,
@@ -14,6 +15,7 @@ enum DirectionType {
 export default class Game extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private hero!: Phaser.Physics.Matter.Sprite;
+  private bot!: Phaser.Physics.Matter.Sprite;
   private minimap!: Phaser.Cameras.Scene2D.Camera;
 
   private gameEnded: boolean;
@@ -104,7 +106,55 @@ export default class Game extends Phaser.Scene {
       }
     }
 
+
+    //~~~~~ bot logic ~~~~
+    this.botLogic()
+
   }
+
+  botLogic() {
+    // Define the vicinity range
+    const vicinityRange = 500;
+    const SPEED = 4
+    const distance = Phaser.Math.Distance.Snake(this.hero.x, this.hero.y, this.bot.x, this.bot.y);
+
+    // If the player is within the vicinity range, the bot follows the player
+    if (distance <= vicinityRange) {
+      const isWithin =   Phaser.Math.Within(this.hero.x, this.bot.x, 5 )
+
+      // Set velocity towards the player, first move horizontally
+      const XValue = Phaser.Math.Within(this.hero.x, this.bot.x, 5 ) ? 0 : Math.floor(this.hero.x - this.bot.x),
+            YValue = Phaser.Math.Within(this.hero.y, this.bot.y, 5 ) ? 0 : Math.floor(this.hero.y - this.bot.y)
+
+
+     // console.log(`XValue ${XValue} YVAlue ${YValue}`);
+      
+      if (XValue > 0) {
+        this.bot.setVelocity(SPEED, 0);
+        this.bot.anims.play("run-left", true);
+      } else if (XValue < 0) {
+        this.bot.setVelocity(-SPEED, 0);
+        this.bot.anims.play("run-right", true);
+      } else if (YValue < 0) {
+        this.bot.setVelocity(0, -SPEED);
+        this.bot.anims.play("run-up", true);
+      } else if (YValue > 0) {
+        this.bot.setVelocity(0, SPEED);
+        this.bot.anims.play("run-down", true);
+      }
+
+      // If the bot is close enough, it attacks the player
+      if (distance <= 50) {
+        this.bot.anims.stop()
+        // Add your attack logic here
+        console.log("Bot att`acks player!");
+        // For example, you can decrease player health here
+      }
+    } else {
+      this.bot.anims.stop()
+    }
+  }
+
 
   getRootBody(body: any) {
     if (body.parent === body) {
@@ -137,9 +187,7 @@ export default class Game extends Phaser.Scene {
 
     this.matter.world.convertTilemapLayer(wallLayer, {});
 
-
     createHeroAnims(this.anims);
-
 
     this.hero = this.matter.add.sprite(2000, 2000, "hero");
 
@@ -173,6 +221,18 @@ export default class Game extends Phaser.Scene {
 
     this.scene.run("game-ui");
 
+    //~~~~~ create bot 
+    this.bot = this.matter.add.sprite(2000, 2500, "bot");
+
+    this.bot.setBody({
+      height: this.bot.height * 0.1,
+      width: this.bot.width * 0.1,
+    });
+
+    this.bot.setFixedRotation();
+    this.bot.setDepth(4);
+    botRun(this.anims)
+
     //@ts-ignore
     this.input.keyboard.on('keyup-T', this.debugKey, this);
 
@@ -181,6 +241,10 @@ export default class Game extends Phaser.Scene {
   debugKey() {
     //x :-3000, y : 3000
     console.log(`hero position x : ${this.hero.x} , y : ${this.hero.y}`);
+  const isWithin =   Phaser.Math.Within(this.hero.x, this.bot.x, 5 )
+  console.log(`bot position x : ${this.bot.x} , y : ${this.bot.y}`);
+  console.log(`isWithin : ${isWithin} `);
+
   }
 
   createSwordCase() {
@@ -215,8 +279,8 @@ export default class Game extends Phaser.Scene {
 
       //destory the case
       sword.destroy();
-     //@ts-ignore
-     const emptyCase =  this.matter.add.image(
+      //@ts-ignore
+      const emptyCase = this.matter.add.image(
         -3000,
         3000,
         "emptyCase",
@@ -238,9 +302,6 @@ export default class Game extends Phaser.Scene {
     })
 
   }
-
-
-
 
   async createChests() {
     const uiScene = this.scene.get('game-ui')

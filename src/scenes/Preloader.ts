@@ -14,6 +14,7 @@ export default class Preloader extends Phaser.Scene {
 
         this.load.tilemapTiledJSON('map', 'tiles/t_map.json');
 
+        ///~~~~ Hero spriteSheet
         this.load.spritesheet('hero', 'hero/hero.png', {
             frameWidth: 148,
             frameHeight: 144,
@@ -22,6 +23,12 @@ export default class Preloader extends Phaser.Scene {
         this.load.spritesheet('heroAttack', 'hero/hero3.png', {
             frameWidth: 356,
             frameHeight: 232,
+        });  
+
+        ///~~~~~~~~ Bot spriteSheet
+        this.load.spritesheet('bot', 'bot/bot.png', {
+            frameWidth: 299,
+            frameHeight: 240,
         });  
 
         this.load.audioSprite('sfx', 'misc/fx_mixdown.json', [
